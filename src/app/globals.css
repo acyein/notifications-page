@@ -9,7 +9,3 @@
 		@apply text-navy/70 hover:text-navy transition;
 	}
 }
-
-@layer components {
-	h4, .h4 { @apply text-xl md:text-2xl; }
-}

@@ -1,8 +1,30 @@
-import Image from 'next/image'
+'use client';
+import { useState, useEffect } from 'react';
 import Card from '../components/card';
 import Footer from '../components/footer';
+import notifications from '../data/notifications';
 
 export default function Home() {
+    const [number, setNumber] = useState(0);
+
+    useEffect(() => {
+        function totalNotifications(notifications) {
+            setNumber(0);
+            notifications.map(notification => {
+                // if isRead is false, plus 1 to total
+                notification.isRead === false && setNumber(number => number + 1);
+            });
+        }
+        totalNotifications(notifications);
+    }, []);
+
+    function handleClick() {
+        notifications.map(notification => {
+            // if isRead is false, minus 1 from total & set isRead to true
+            notification.isRead === false && ((setNumber(number => number - 1), (notification.isRead = true)))
+        })
+    }
+
     return (
         <div className="flex flex-col font-primary bg-white sm:bg-bluegray-100 min-h-screen sm:px-4 sm:pt-4">
             <div className="flex sm:items-center flex-grow">
@@ -10,78 +32,20 @@ export default function Home() {
                     {/* Header */}
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex justify-start items-center gap-3">
-                            <p className="h4 font-bold text-blue-900">Notifications</p>
-                            <span className="bg-navy font-bold text-white text-sm rounded px-3 py-0.5">3</span>
+                            <h1 className="text-xl md:text-2xl font-bold text-blue-900">Notifications</h1>
+                            <span className="bg-navy font-bold text-white text-sm rounded px-3 py-0.5">{number}</span>
                         </div>
-                        <a href="" className="hover:text-navy">Mark all as read</a>
+                        <button className="hover:text-navy" onClick={handleClick}>Mark all as read</button>
                     </div>
 
                     {/* Cards */}
                     <div className="space-y-2">
-                        <Card
-                            isPacked={true}
-                            profilePic={'/images/avatar-mark-webber.webp'}
-                            person={'Mark Webber'}
-                            msg={'reacted to your recent post'}
-                            reference={'My first tournament today!'}
-                            timeAgo={'1m'}
-                        />
-                        <Card
-                            profilePic={'/images/avatar-angela-gray.webp'}
-                            person={'Angela Gray'}
-                            msg={'followed you'}
-                            timeAgo={'5m'}
-                        />
-                        <Card
-                            profilePic={'/images/avatar-jacob-thompson.webp'}
-                            person={'Jacob Thompson'}
-                            msg={'has joined your group'}
-                            reference={'Chess Club'}
-                            timeAgo={'1 day'}
-                        />
-                        <Card
-                            profilePic={'/images/avatar-rizky-hasanuddin.webp'}
-                            person={'Rizky Hasanuddin'}
-                            msg={'sent you a private message'}
-                            timeAgo={'5 days'}
-                            content={
-                                <div className="border border-bluegray-300 rounded-lg mt-5 px-4 py-3 transition hover:bg-bluegray-200">
-                                    <a href=""> Hello, thanks for setting up the Chess Club. I've been a member for a few weeks now and I'm already having lots of fun and improving my game.</a>
-                                </div>
-                            }
-                        />
-                        <Card
-                            profilePic={'/images/avatar-kimberly-smith.webp'}
-                            person={'Kimberly Smith'}
-                            msg={'commented on your picture'}
-                            referencePic={
-                                <Image
-                                    className="ml-auto"
-                                    src={'/images/image-chess.webp'}
-                                    width={48}
-                                    height={48}
-                                    alt="Reference photo"
-                                />
-                            }
-                            timeAgo={'1 week'}
-                        />
-                        <Card
-                            profilePic={'/images/avatar-nathan-peterson.webp'}
-                            person={'Nathan Peterson'}
-                            msg={'reacted to your recent post'}
-                            reference={'5 end-game strategies to increase your win rate'}
-                            timeAgo={'2 weeks'}
-                        />
-                        <Card
-                            profilePic={'/images/avatar-anna-kim.webp'}
-                            person={'Anna Kim'}
-                            msg={'left the group'}
-                            reference={'Chess Club'}
-                            timeAgo={'2 weeks'}
-                        />
+                        <Card />
                     </div>
                 </main>
             </div>
+
+            {/* Footer */}
             <Footer />
         </div>
     );
